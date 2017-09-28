@@ -1,92 +1,56 @@
 //
-//  ViewController.swift
-//  ReplayKitSample
+//  AssetWriter.swift
+//  AVPlayerSample
+//
+//  Created by Shingai Yoshimi on 2017/09/28.
 //
 
 import UIKit
+import Foundation
+import AVFoundation
 import ReplayKit
 
-class ViewController: UIViewController {
-    // MARK: Properties
-    var assetWriter: AVAssetWriter?
-    var videoInput: AVAssetWriterInput?
-    var audioInput: AVAssetWriterInput?
-    var videoWidth = 0
-    var videoHeight = 0
+class AssetWriter {
+    private var assetWriter: AVAssetWriter?
+    private var videoInput: AVAssetWriterInput?
+    private var audioInput: AVAssetWriterInput?
+    private let fileName: String
     
     let writeQueue = DispatchQueue(label: "writeQueue")
     
-    var player: AVPlayer?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        if let path = Bundle.main.path(forResource: "sample", ofType: "mp4") {
-            let item = AVPlayerItem(url: URL(fileURLWithPath: path))
-            NotificationCenter.default.addObserver(self, selector: #selector(ViewController.playerDidFinishPlaying), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
-            
-            player = AVPlayer(playerItem: item)
-            
-            if let playerLayer = view.layer as? AVPlayerLayer {
-                playerLayer.player = player
-            }
-            
-            player?.play()
-            startCapture()
-        }
+    init(fileName: String) {
+        self.fileName = fileName
     }
     
-    func playerDidFinishPlaying() {
-        self.stopCapture()
-    }
-}
-
-extension ViewController {
-    func startCapture() {
-        RPScreenRecorder.shared().startCapture(handler: { (buffer, bufferType, err) in
-            self.write(buffer: buffer, bufferType: bufferType)
-        }, completionHandler: {
-            if let error = $0 {
-                print(error)
-            }
-        })
-    }
-    
-    func stopCapture() {
-        RPScreenRecorder.shared().stopCapture {
-            if let err = $0 {
-                print(err)
-            }
-            self.finishWriting()
-        }
-    }
-}
-
-extension ViewController {
-    func setupWriter(buffer: CMSampleBuffer) {
+    private var videoDirectoryPath: String {
         let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        var path = dir + "/ReplayKitSample"
-        
-        if FileManager.default.fileExists(atPath: path) {
+        return dir + "/Videos"
+    }
+    
+    private var filePath: String {
+        return videoDirectoryPath + "/\(fileName)"
+    }
+    
+    private func setupWriter(buffer: CMSampleBuffer) {
+        if FileManager.default.fileExists(atPath: videoDirectoryPath) {
             do {
-                try FileManager.default.removeItem(atPath: path)
+                try FileManager.default.removeItem(atPath: videoDirectoryPath)
             } catch {
                 print("fail to removeItem")
             }
         }
         do {
-            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(atPath: videoDirectoryPath, withIntermediateDirectories: true, attributes: nil)
         } catch {
             print("fail to createDirectory")
         }
         
-        path += "/sample.mp4"
-        self.assetWriter = try? AVAssetWriter(outputURL: URL(fileURLWithPath: path), fileType: AVFileTypeQuickTimeMovie)
+        self.assetWriter = try? AVAssetWriter(outputURL: URL(fileURLWithPath: filePath), fileType: AVFileTypeQuickTimeMovie)
         
         let writerOutputSettings = [
             AVVideoCodecKey: AVVideoCodecType.h264,
-            AVVideoWidthKey: videoWidth,
-            AVVideoHeightKey: videoHeight,
+            AVVideoWidthKey: UIScreen.main.bounds.width,
+            AVVideoHeightKey: UIScreen.main.bounds.height,
             ] as [String : Any]
         
         self.videoInput = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: writerOutputSettings)
@@ -117,17 +81,9 @@ extension ViewController {
         }
     }
     
-    func write(buffer: CMSampleBuffer, bufferType: RPSampleBufferType) {
+    public func write(buffer: CMSampleBuffer, bufferType: RPSampleBufferType) {
         writeQueue.sync {
             if assetWriter == nil {
-                if videoWidth == 0 && videoHeight == 0 && bufferType == .video {
-                    if let imageBuffer = CMSampleBufferGetImageBuffer(buffer) {
-                        videoWidth = CVPixelBufferGetWidth(imageBuffer)
-                        videoHeight = CVPixelBufferGetHeight(imageBuffer)
-                    }
-                    return
-                }
-                
                 if bufferType == .audioApp {
                     setupWriter(buffer: buffer)
                 }
@@ -162,12 +118,13 @@ extension ViewController {
         }
     }
     
-    func finishWriting() {
+    public func finishWriting() {
         writeQueue.sync {
             self.assetWriter?.finishWriting(completionHandler: {
                 print("finishWriting")
+                
+                UISaveVideoAtPathToSavedPhotosAlbum(self.filePath, nil, nil, nil)
             })
         }
     }
 }
-
