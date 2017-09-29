@@ -16,7 +16,7 @@
 		881362391F7D3D8200D74806 /* sample.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 881362341F7D3D8100D74806 /* sample.mp4 */; };
 		8813623A1F7D3D8200D74806 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881362351F7D3D8100D74806 /* PlayerView.swift */; };
 		8813623B1F7D3D8200D74806 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881362361F7D3D8100D74806 /* ViewController.swift */; };
-		8813623D1F7D440200D74806 /* AssetWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8813623C1F7D440200D74806 /* AssetWriter.swift */; };
+		881362651F7D56A000D74806 /* AssetWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881362641F7D56A000D74806 /* AssetWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +32,7 @@
 		881362341F7D3D8100D74806 /* sample.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = sample.mp4; path = AVPlayerSample/sample.mp4; sourceTree = SOURCE_ROOT; };
 		881362351F7D3D8100D74806 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerView.swift; path = AVPlayerSample/PlayerView.swift; sourceTree = SOURCE_ROOT; };
 		881362361F7D3D8100D74806 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = AVPlayerSample/ViewController.swift; sourceTree = SOURCE_ROOT; };
-		8813623C1F7D440200D74806 /* AssetWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssetWriter.swift; path = ../../SpriteKitSample/SpriteKitSample/AssetWriter.swift; sourceTree = "<group>"; };
+		881362641F7D56A000D74806 /* AssetWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AssetWriter.swift; path = AVPlayerSample/AssetWriter.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +61,7 @@
 		466CB3311EE931DA00218B7F = {
 			isa = PBXGroup;
 			children = (
-				8813622F1F7D3D2600D74806 /* AVPlayerSample */,
+				881362661F7D56EE00D74806 /* AVPlayerSample */,
 				466CB33B1EE931DA00218B7F /* Products */,
 				463F673D1EE93B9800740505 /* Frameworks */,
 			);
@@ -75,9 +75,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8813622F1F7D3D2600D74806 /* AVPlayerSample */ = {
+		881362661F7D56EE00D74806 /* AVPlayerSample */ = {
 			isa = PBXGroup;
 			children = (
+				881362641F7D56A000D74806 /* AssetWriter.swift */,
 				881362301F7D3D7200D74806 /* AppDelegate.swift */,
 				881362321F7D3D8000D74806 /* Assets.xcassets */,
 				881362331F7D3D8100D74806 /* Info.plist */,
@@ -86,10 +87,8 @@
 				881362351F7D3D8100D74806 /* PlayerView.swift */,
 				881362341F7D3D8100D74806 /* sample.mp4 */,
 				881362361F7D3D8100D74806 /* ViewController.swift */,
-				8813623C1F7D440200D74806 /* AssetWriter.swift */,
 			);
-			name = AVPlayerSample;
-			path = "New Group";
+			path = AVPlayerSample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,8 +163,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				881362651F7D56A000D74806 /* AssetWriter.swift in Sources */,
 				8813623B1F7D3D8200D74806 /* ViewController.swift in Sources */,
-				8813623D1F7D440200D74806 /* AssetWriter.swift in Sources */,
 				881362311F7D3D7200D74806 /* AppDelegate.swift in Sources */,
 				8813623A1F7D3D8200D74806 /* PlayerView.swift in Sources */,
 			);
